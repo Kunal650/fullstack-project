@@ -1,5 +1,5 @@
 # Minimal Podfile for reliable installation
-platform :ios, '17.0'
+platform :ios, '15.0'
 
 target 'ProjectApp' do
   use_frameworks!
