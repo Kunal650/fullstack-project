@@ -4,13 +4,18 @@
 
 echo "🔍 Verifying iOS project structure..."
 
-# Check if we're in the right directory
-if [ ! -d "ios" ]; then
-    echo "❌ Not in project root directory"
+# Check if we're in the ios directory or project root
+if [ -d "ProjectApp" ]; then
+    echo "✅ Already in ios directory"
+elif [ -d "ios" ]; then
+    echo "✅ In project root, changing to ios directory"
+    cd ios
+else
+    echo "❌ Not in project root or ios directory"
+    echo "Current directory: $(pwd)"
+    echo "Contents: $(ls -la)"
     exit 1
 fi
-
-cd ios
 
 echo "📁 Checking project files..."
 

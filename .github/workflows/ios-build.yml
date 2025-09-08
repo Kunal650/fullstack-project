@@ -55,11 +55,20 @@ jobs:
           echo "No Podfile found, building without CocoaPods"
         fi
         
+    - name: Debug project structure
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Contents:"
+        ls -la
+        echo "iOS directory contents:"
+        ls -la ios/
+        echo "iOS ProjectApp directory contents:"
+        ls -la ios/ProjectApp/
+        
     - name: Verify iOS project structure
       run: |
-        cd ios
-        chmod +x verify-project.sh
-        ./verify-project.sh
+        chmod +x ios/verify-project.sh
+        ./ios/verify-project.sh
         
     - name: List available simulators
       run: |
