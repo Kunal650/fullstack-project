@@ -5,6 +5,7 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch: # Allow manual triggering
 
 jobs:
   build-ios:
@@ -19,12 +20,16 @@ jobs:
       with:
         xcode-version: latest-stable
         
-    - name: Install dependencies
+    - name: Install CocoaPods dependencies
       run: |
         cd ios
-        pod install
+        if [ -f "Podfile" ]; then
+          pod install
+        else
+          echo "No Podfile found, skipping pod install"
+        fi
         
-    - name: Build iOS app
+    - name: Build iOS app for Simulator
       run: |
         cd ios
         xcodebuild -workspace ProjectApp.xcworkspace -scheme ProjectApp -destination 'platform=iOS Simulator,name=iPhone 15' build
@@ -35,7 +40,8 @@ jobs:
         xcodebuild -workspace ProjectApp.xcworkspace -scheme ProjectApp -destination generic/platform=iOS archive -archivePath ProjectApp.xcarchive
         
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: ios-build
+        name: ios-build-${{ github.run_number }}
         path: ios/ProjectApp.xcarchive
+        retention-days: 30
