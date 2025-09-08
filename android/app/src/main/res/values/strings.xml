@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ProjectApp</string>
+    <string name="welcome_message">Welcome to ProjectApp!</string>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="login_toast">Login button clicked!</string>
+    <string name="register_toast">Register button clicked!</string>
+</resources>
