@@ -55,6 +55,11 @@ jobs:
           echo "No Podfile found, building without CocoaPods"
         fi
         
+    - name: Test project structure
+      run: |
+        chmod +x ios/test-project.sh
+        ./ios/test-project.sh
+        
     - name: Debug project structure
       run: |
         echo "Current directory: $(pwd)"
@@ -79,10 +84,11 @@ jobs:
         cd ios
         echo "Available schemes:"
         if [ -f "ProjectApp.xcworkspace" ]; then
-          xcodebuild -workspace ProjectApp.xcworkspace -list
+          xcodebuild -workspace ProjectApp.xcworkspace -list || echo "Workspace scheme listing failed"
         else
-          xcodebuild -project ProjectApp.xcodeproj -list
+          xcodebuild -project ProjectApp.xcodeproj -list || echo "Project scheme listing failed"
         fi
+        echo "Proceeding with build anyway..."
         
     - name: Build iOS app for Simulator
       run: |
