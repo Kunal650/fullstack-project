@@ -55,15 +55,37 @@ jobs:
           echo "No Podfile found, building without CocoaPods"
         fi
         
+    - name: Verify iOS project structure
+      run: |
+        cd ios
+        chmod +x verify-project.sh
+        ./verify-project.sh
+        
+    - name: List available simulators
+      run: |
+        xcrun simctl list devices available
+        
     - name: Build iOS app for Simulator
       run: |
         cd ios
         if [ -f "ProjectApp.xcworkspace" ]; then
           echo "Building with workspace (CocoaPods)"
-          xcodebuild -workspace ProjectApp.xcworkspace -scheme ProjectApp -destination 'platform=iOS Simulator,name=iPhone 15' build
+          xcodebuild -workspace ProjectApp.xcworkspace -scheme ProjectApp -destination 'platform=iOS Simulator,name=iPhone 15' build || {
+            echo "iPhone 15 not available, trying iPhone 14..."
+            xcodebuild -workspace ProjectApp.xcworkspace -scheme ProjectApp -destination 'platform=iOS Simulator,name=iPhone 14' build || {
+              echo "iPhone 14 not available, trying generic iOS Simulator..."
+              xcodebuild -workspace ProjectApp.xcworkspace -scheme ProjectApp -destination 'platform=iOS Simulator' build
+            }
+          }
         else
           echo "Building with project file (no CocoaPods)"
-          xcodebuild -project ProjectApp.xcodeproj -scheme ProjectApp -destination 'platform=iOS Simulator,name=iPhone 15' build
+          xcodebuild -project ProjectApp.xcodeproj -scheme ProjectApp -destination 'platform=iOS Simulator,name=iPhone 15' build || {
+            echo "iPhone 15 not available, trying iPhone 14..."
+            xcodebuild -project ProjectApp.xcodeproj -scheme ProjectApp -destination 'platform=iOS Simulator,name=iPhone 14' build || {
+              echo "iPhone 14 not available, trying generic iOS Simulator..."
+              xcodebuild -project ProjectApp.xcodeproj -scheme ProjectApp -destination 'platform=iOS Simulator' build
+            }
+          }
         fi
         
     - name: Archive iOS app
