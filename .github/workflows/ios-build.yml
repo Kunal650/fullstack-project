@@ -20,12 +20,18 @@ jobs:
       with:
         xcode-version: latest-stable
         
-    - name: Install CocoaPods (if needed)
+    - name: Install CocoaPods
+      run: |
+        sudo gem install cocoapods
+        pod --version
+        
+    - name: Install CocoaPods dependencies
       run: |
         cd ios
         if [ -f "Podfile" ]; then
-          sudo gem install cocoapods
-          pod install --repo-update
+          echo "Installing CocoaPods dependencies..."
+          pod install --verbose --repo-update
+          echo "CocoaPods installation completed successfully!"
         else
           echo "No Podfile found, building without CocoaPods"
         fi

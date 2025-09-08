@@ -5,9 +5,19 @@ target 'ProjectApp' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for ProjectApp
+  # Networking
   pod 'Alamofire', '~> 5.8'
+  
+  # JSON handling
   pod 'SwiftyJSON', '~> 5.0'
+  
+  # Secure storage
   pod 'KeychainSwift', '~> 20.0'
+  
+  # Image loading
+  pod 'SDWebImageSwiftUI', '~> 2.0'
+  
+  # UI enhancements
+  pod 'SwiftUI-Introspect', '~> 0.12'
 
 end
