@@ -20,24 +20,37 @@ jobs:
       with:
         xcode-version: latest-stable
         
-    - name: Install CocoaPods dependencies
+    - name: Install CocoaPods (if needed)
       run: |
         cd ios
         if [ -f "Podfile" ]; then
-          pod install
+          sudo gem install cocoapods
+          pod install --repo-update
         else
-          echo "No Podfile found, skipping pod install"
+          echo "No Podfile found, building without CocoaPods"
         fi
         
     - name: Build iOS app for Simulator
       run: |
         cd ios
-        xcodebuild -workspace ProjectApp.xcworkspace -scheme ProjectApp -destination 'platform=iOS Simulator,name=iPhone 15' build
+        if [ -f "ProjectApp.xcworkspace" ]; then
+          echo "Building with workspace (CocoaPods)"
+          xcodebuild -workspace ProjectApp.xcworkspace -scheme ProjectApp -destination 'platform=iOS Simulator,name=iPhone 15' build
+        else
+          echo "Building with project file (no CocoaPods)"
+          xcodebuild -project ProjectApp.xcodeproj -scheme ProjectApp -destination 'platform=iOS Simulator,name=iPhone 15' build
+        fi
         
     - name: Archive iOS app
       run: |
         cd ios
-        xcodebuild -workspace ProjectApp.xcworkspace -scheme ProjectApp -destination generic/platform=iOS archive -archivePath ProjectApp.xcarchive
+        if [ -f "ProjectApp.xcworkspace" ]; then
+          echo "Archiving with workspace (CocoaPods)"
+          xcodebuild -workspace ProjectApp.xcworkspace -scheme ProjectApp -destination generic/platform=iOS archive -archivePath ProjectApp.xcarchive
+        else
+          echo "Archiving with project file (no CocoaPods)"
+          xcodebuild -project ProjectApp.xcodeproj -scheme ProjectApp -destination generic/platform=iOS archive -archivePath ProjectApp.xcarchive
+        fi
         
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4

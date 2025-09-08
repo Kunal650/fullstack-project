@@ -10,13 +10,4 @@ target 'ProjectApp' do
   pod 'SwiftyJSON', '~> 5.0'
   pod 'KeychainSwift', '~> 20.0'
 
-  target 'ProjectAppTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'ProjectAppUITests' do
-    # Pods for testing
-  end
-
 end

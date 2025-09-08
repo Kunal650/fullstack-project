@@ -1,0 +1,10 @@
+# Simple Podfile - minimal dependencies
+platform :ios, '17.0'
+
+target 'ProjectApp' do
+  use_frameworks!
+  
+  # No external dependencies for now - just build the basic app
+  # Add dependencies later as needed
+  
+end
